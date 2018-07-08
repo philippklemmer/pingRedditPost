@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Get Top Reddit Posts with Golang</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <h1>Get Top Reddit Posts with Golang 🔥</h1>
+        <ul>
+            {{range .}}
+                <li>{{.Post.Title}} - <a href="{{.Post.Link}}">Click here</a></li>
+            {{end}}
+        </ul>
+    </body>
+</html>
