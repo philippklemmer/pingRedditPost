@@ -8,25 +8,26 @@ import (
 	"time"
 )
 
-type RedditListing struct {
-	Kind           string `json:"kind"`
-	RedditMetaData struct {
+// Listing consists the initial reddit post object
+type Listing struct {
+	Kind     string `json:"kind"`
+	MetaData struct {
 		Modhash string         `json:"modhash"`
 		Dist    int            `json:"dist"`
 		Posts   []PostMetaData `json:"children"`
 	} `json:"data"`
 }
 
+// PostMetaData consists of specific meta data and posts
 type PostMetaData struct {
 	Kind string `json:"kind"`
-	Post Post   `json:"data"`
+	Post struct {
+		Title string `json:"title"`
+		Link  string `json:"url"`
+	} `json:"data"`
 }
 
-type Post struct {
-	Title string `json:"title"`
-	Link  string `json:"url"`
-}
-
+// GetTopPosts return the 20 top posts of /r/all
 func GetTopPosts() []PostMetaData {
 	url := "https://www.reddit.com/r/all/.json?"
 	client := http.Client{
@@ -49,10 +50,10 @@ func GetTopPosts() []PostMetaData {
 		log.Fatal(readErr)
 	}
 
-	data := RedditListing{}
+	data := Listing{}
 	jsonErr := json.Unmarshal(body, &data)
 	if jsonErr != nil {
 		log.Fatal(jsonErr)
 	}
-	return data.RedditMetaData.Posts
+	return data.MetaData.Posts
 }
