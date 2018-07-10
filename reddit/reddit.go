@@ -2,8 +2,6 @@ package reddit
 
 import (
 	"encoding/json"
-	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 )
@@ -28,7 +26,7 @@ type PostMetaData struct {
 }
 
 // GetTopPosts return the 20 top posts of /r/all
-func GetTopPosts() []PostMetaData {
+func GetTopPosts() ([]PostMetaData, error) {
 	url := "https://www.reddit.com/r/all/.json?"
 	client := http.Client{
 		Timeout: time.Second * 2, // Maximum of 2 secs
@@ -36,24 +34,18 @@ func GetTopPosts() []PostMetaData {
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	req.Header.Set("User-Agent", "reddit-post")
 
-	res, getErr := client.Do(req)
-	if getErr != nil {
-		log.Fatal(getErr)
-	}
-
-	body, readErr := ioutil.ReadAll(res.Body)
-	if readErr != nil {
-		log.Fatal(readErr)
+	res, err := client.Do(req)
+	if err != nil {
+		return nil, err
 	}
 
 	data := Listing{}
-	jsonErr := json.Unmarshal(body, &data)
-	if jsonErr != nil {
-		log.Fatal(jsonErr)
+	if err = json.NewDecoder(res.Body).Decode(&data); err != nil {
+		return nil, err
 	}
-	return data.MetaData.Posts
+	return data.MetaData.Posts, nil
 }
