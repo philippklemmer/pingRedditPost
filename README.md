@@ -1,13 +1,12 @@
-pingRedditPost 🔥
+# pingRedditPost 🔥
 ===
-
 Get top 20 Reddit Posts of /r/all
 
-Get it and run `go run main.go`
+## Requirements:
+- std libs only :)
 
-What things you need to install the software and how to install them
--   used std libs only :)
-
+## Startup
+`go get github.com/philippklemmer/pingRedditPost` + `go run main.go`
 
 ![Screenshow](https://preview.ibb.co/d52qBo/ping_Reddit_Bot.png "pingRedditPosts")
 
